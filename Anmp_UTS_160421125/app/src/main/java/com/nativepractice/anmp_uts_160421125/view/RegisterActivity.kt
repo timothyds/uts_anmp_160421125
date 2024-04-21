@@ -22,13 +22,13 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        queue = Volley.newRequestQueue(this)
+        queue = Volley.newRequestQueue(this@RegisterActivity)
         binding.btnCreate.setOnClickListener {
             val username = binding.txtUsernameR.text.toString().trim()
             val password = binding.txtPasswordR.text.toString().trim()
             if (username.isNotEmpty() && password.isNotEmpty()) {
                 Log.d("DEBUG", "username: $username")
-                Log.d("DEBUG", "username: $password")
+                Log.d("DEBUG", "password: $password")
                 registerUser(username, password)
             } else {
                 Toast.makeText(this, "Please enter username and password", Toast.LENGTH_SHORT).show()
@@ -36,28 +36,29 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
     private fun registerUser(username: String, password: String) {
-        val url = "http://192.168.1.4/gundam/cobaregister.php"
+        val url = "http://192.168.1.4/gundam/register.php"
 
-//        val jsonObject = JSONObject().apply {
-//            put("username", username)
-//            put("password", password)
-//        }
-        val postParams: MutableMap<Any, Any> = HashMap()
+        val jsonObject = JSONObject().apply {
+            put("username", username)
+            put("password", password)
+        }
+        val postParams: MutableMap<String, String> = HashMap()
         postParams["username"] = username
         postParams["password"] = password
 
         val jsonObjectRequest = JsonObjectRequest(
-            Request.Method.POST, url, JSONObject(postParams as Map<*, *>?),
+            Request.Method.POST, url, jsonObject,
             Response.Listener { response ->
                 try {
                     val success = response.getBoolean("success")
-                    val message = response.getString("message")
-                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-
                     if (success) {
+                        Toast.makeText(this, "Regis successful", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this, LoginActivity::class.java)
                         startActivity(intent)
                         finish()
+                    }else{
+                        val message = response.getString("message")
+                        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
                     }
                 } catch (e: JSONException) {
                     e.printStackTrace()
@@ -69,6 +70,7 @@ class RegisterActivity : AppCompatActivity() {
                 Log.e("VolleyError", "Volley Error: ${error.message}")
                 Toast.makeText(this, "Volley Error: " + error.message, Toast.LENGTH_SHORT).show()
             })
+
 
         queue.add(jsonObjectRequest)
     }

@@ -21,13 +21,21 @@ import java.util.concurrent.TimeUnit
 class HobbyDetailFragment : Fragment() {
     private lateinit var viewModel:DetailViewModel
     private lateinit var binding: FragmentHobbyDetailBinding
+    private var currentPage = 0
+    private var totalPages = 0
+    private lateinit var pages: List<String>
     fun observeHobby() {
         viewModel.hobbyLD.observe(viewLifecycleOwner, Observer {
             var hobby = it
             binding.txtTitleDetail.setText(viewModel.hobbyLD.value?.title)
             binding.txtUsernameDetail.setText(viewModel.hobbyLD.value?.username)
-            binding.txtDetail.setText(viewModel.hobbyLD.value?.detail)
+//            binding.txtDetail.setText(viewModel.hobbyLD.value?.detail)
             Picasso.get().load(hobby.photoUrl).into(binding.imgHobbyDetail)
+            pages = hobby.detail?.split("\n") ?: emptyList()
+            totalPages = pages.size
+
+            // Menampilkan page pertama
+            showPage(currentPage)
         })
     }
 
@@ -41,7 +49,24 @@ class HobbyDetailFragment : Fragment() {
         val hobbyId = requireArguments().getString("hobbyId")
         viewModel.fetch(hobbyId!!, requireContext())
         observeHobby()
+        binding.btnBack.setOnClickListener {
+            if(currentPage>0){
+                currentPage--
+                showPage(currentPage)
+            }
+        }
+        binding.btnNext.setOnClickListener {
+            if(currentPage < totalPages -1 ){
+                currentPage++
+                showPage(currentPage)
+            }
+        }
         return binding.root
 
+    }
+    private fun showPage(pageIndex: Int) {
+        if (pageIndex >= 0 && pageIndex < totalPages) {
+            binding.txtDetail.text = pages[pageIndex]
+        }
     }
 }

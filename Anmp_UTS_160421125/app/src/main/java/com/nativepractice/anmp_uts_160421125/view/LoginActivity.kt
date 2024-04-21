@@ -36,6 +36,8 @@ class LoginActivity : AppCompatActivity() {
             if(username.isEmpty() && password.isEmpty()){
                 Toast.makeText(this,"Username dan password tidak boleh kosong",Toast.LENGTH_SHORT).show()
             }else{
+                Log.d("DEBUG", "username: $username")
+                Log.d("DEBUG", "password: $password")
                 login(username,password)
             }
         }
