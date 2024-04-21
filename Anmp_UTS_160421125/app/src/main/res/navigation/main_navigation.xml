@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/itemHome">
+
+    <fragment
+        android:id="@+id/itemHome"
+        android:name="com.nativepractice.anmp_uts_160421125.view.HobbyListFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_hobby_list">
+        <action
+            android:id="@+id/actionHobbyDetail"
+            app:destination="@id/hobbyDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/hobbyDetailFragment"
+        android:name="com.nativepractice.anmp_uts_160421125.view.HobbyDetailFragment"
+        android:label="fragment_hobby_detail"
+        tools:layout="@layout/fragment_hobby_detail" >
+        <argument
+            android:name="hobbyId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/itemHistory"
+        android:name="com.nativepractice.anmp_uts_160421125.view.HistoryFragment"
+        android:label="Reading History"
+        tools:layout="@layout/fragment_history" />
+    <fragment
+        android:id="@+id/itemProfile"
+        android:name="com.nativepractice.anmp_uts_160421125.view.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
+</navigation>
