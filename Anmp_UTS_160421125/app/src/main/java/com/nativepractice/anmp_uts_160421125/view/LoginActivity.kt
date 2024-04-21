@@ -55,13 +55,12 @@ class LoginActivity : AppCompatActivity() {
                 try {
                     val success = response.getBoolean("success")
                     if (success) {
-
-                        Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
                         val loggedInUsername = response.getString("username")
                         val loggedInPassword = response.getString("password")
                         saveLoginInformation(loggedInUsername,loggedInPassword)
+                        Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
                         finish()
                     } else {
                         val message = response.getString("message")
